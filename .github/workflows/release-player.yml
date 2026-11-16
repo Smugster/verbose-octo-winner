@@ -1,0 +1,44 @@
+name: Release player
+# Signs the next player build from player/ into site/, which screens read. Runs when player/ changes, or from
+# Actions > Release player > Run workflow, where a test release can be chosen.
+on:
+  push:
+    branches: [main]
+    paths: ['player/**', 'tools/release.py']
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: 'What to release'
+        type: choice
+        options: [normal, broken, rollout-0, tampered]
+        default: normal
+permissions:
+  contents: write
+concurrency:
+  group: release-player
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install cryptography
+      - name: Signing key
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        run: |
+          if [ -z "$SIGNING_KEY" ]; then echo "::error::Add the SIGNING_KEY secret: Settings > Secrets and variables > Actions"; exit 1; fi
+          mkdir -p keys && printf '%s\n' "$SIGNING_KEY" > keys/private.pem && chmod 600 keys/private.pem
+      - name: Sign the next build
+        run: python3 tools/ci_release.py --kind "${{ inputs.kind || 'normal' }}"
+      - name: Publish
+        run: |
+          rm -f keys/private.pem
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site
+          git commit -m "Player release $(python3 -c "import json; print(json.load(open('site/manifest.json'))['build'])") (${{ inputs.kind || 'normal' }})"
+          git push
