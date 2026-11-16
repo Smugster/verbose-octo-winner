@@ -1,0 +1,15 @@
+{
+ "updateUrl": "https://YOUR-GITHUB-NAME.github.io/YOUR-REPO/",
+ "checkMinutes": 1,
+ "probationSeconds": 60,
+ "switchPolicy": "now",
+ "showStatus": true,
+ "player": {
+  "deviceId": "",
+  "lines": [
+   "Deli Line"
+  ],
+  "meal": "Lunch",
+  "date": ""
+ }
+}
