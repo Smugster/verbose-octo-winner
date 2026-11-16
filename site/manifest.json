@@ -1,7 +1,7 @@
 {
- "build": 1,
- "version": "build 1 (normal)",
- "created": "2026-11-16T18:05:53+00:00",
+ "build": 2,
+ "version": "build 2 (normal)",
+ "created": "2026-11-16T18:19:02+00:00",
  "entry": "index.html",
  "rollout": 100,
  "minShell": 1,
@@ -9,7 +9,7 @@
   {
    "path": "index.html",
    "size": 787833,
-   "sha256": "8b5d0c1c5e9896fd9768d30280fc1a1c9c7f2e2c9b3a99352bf1d84e02959682"
+   "sha256": "8f54e36956fdba5c8f349743605ff96dfdf6a79c5c4e5836fd2bbaedde8288c2"
   },
   {
    "path": "poc-config.js",
