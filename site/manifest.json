@@ -1,0 +1,20 @@
+{
+ "build": 1,
+ "version": "build 1 (normal)",
+ "created": "2026-11-16T18:05:53+00:00",
+ "entry": "index.html",
+ "rollout": 100,
+ "minShell": 1,
+ "files": [
+  {
+   "path": "index.html",
+   "size": 787833,
+   "sha256": "8b5d0c1c5e9896fd9768d30280fc1a1c9c7f2e2c9b3a99352bf1d84e02959682"
+  },
+  {
+   "path": "poc-config.js",
+   "size": 233,
+   "sha256": "94971e4ffbcac21a9414f522123bbe8753ffc4507364dfd92297d4f61b0ea9ec"
+  }
+ ]
+}
