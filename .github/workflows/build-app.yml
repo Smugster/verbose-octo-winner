@@ -1,0 +1,49 @@
+name: Build app
+# Builds the shell APK, pointed at this repository's releases, with the screen's settings from the SCREEN_DEVICE_ID secret.
+# Runs when android/ changes, or from Actions > Build app > Run workflow. Download the APK from the run's Artifacts.
+on:
+  push:
+    branches: [main]
+    paths: ['android/**', 'tools/ci_prepare_app.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install cryptography
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Signing key (for the built-in player)
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        run: |
+          if [ -z "$SIGNING_KEY" ]; then echo "::error::Add the SIGNING_KEY secret: Settings > Secrets and variables > Actions"; exit 1; fi
+          mkdir -p keys && printf '%s\n' "$SIGNING_KEY" > keys/private.pem && chmod 600 keys/private.pem
+      - name: Prepare the app
+        env:
+          SCREEN_DEVICE_ID: ${{ secrets.SCREEN_DEVICE_ID }}
+          SCREEN_LINES: ${{ vars.SCREEN_LINES }}
+          SCREEN_MEAL: ${{ vars.SCREEN_MEAL }}
+        run: |
+          python3 tools/ci_prepare_app.py
+          rm -f keys/private.pem
+      - name: Test the update logic
+        run: java test/RunTests.java
+      - name: Build the APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sctv-shell-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
