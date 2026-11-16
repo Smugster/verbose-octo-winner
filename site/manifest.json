@@ -1,15 +1,15 @@
 {
- "build": 3,
- "version": "build 3 (broken)",
- "created": "2026-11-16T18:25:13+00:00",
+ "build": 4,
+ "version": "build 4 (tampered)",
+ "created": "2026-11-16T18:32:12+00:00",
  "entry": "index.html",
- "rollout": 100,
+ "rollout": 99,
  "minShell": 1,
  "files": [
   {
    "path": "index.html",
-   "size": 787832,
-   "sha256": "99efefcfc24c97a70c449d418810376dcb076839c80ff0195418042121451e87"
+   "size": 787833,
+   "sha256": "d84daff5e8d8aab7a7f10537fb64f6edce9699362f65b73c4740f3e340f0e860"
   },
   {
    "path": "poc-config.js",
